@@ -1,0 +1,207 @@
+<div class="flex flex-col flex-auto min-w-0">
+   <!-- Header -->
+  <div
+    class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+    <div class="flex-1 min-w-0">
+      <!-- Breadcrumbs -->
+      <div class="flex flex-wrap items-center font-medium">
+        <div>
+          <a class="whitespace-nowrap text-primary-500">Broadcast</a>
+        </div>
+        <div class="flex items-center ml-1 whitespace-nowrap">
+          <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+          <a class="ml-1 text-primary-500">Carga masiva</a>
+        </div>
+      </div>
+      <!-- Title -->
+      <div class="mt-2">
+        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+          Carga Masiva
+        </h2>
+      </div>
+    </div>
+  </div>
+  <!-- <mat-spinner class="relative flex flex-0 items-center justify-center w-full h-28  px-4 md:px-6 z-49 "></mat-spinner> -->
+
+  <ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Cargando proceso...</p>
+</ngx-spinner>
+
+  <!-- Main -->
+  <div class="flex-auto p-6 sm:p-10 " >
+    <div class="prose prose-sm max-w-3xl">
+        <h3 class="mt-12">Envio de Broadcast</h3>
+    </div>
+    <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card" *ngIf="showForm">
+      <!-- Titulo del dashboard -->
+      
+      <!-- Formulario para la carga de archivo broadcast -->
+      <form class="flex flex-col mt-8 p-8 bg-card">
+        <!--Carga de archivo con drag and drop -->
+        <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
+          (onFileLeave)="fileLeave($event)">
+          <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+            Arrastra y suelta un archivo aquí.
+
+            <!-- <button style="margin-left: 25px;" type="button" class="btn btn-secondary"
+            (click)="openFileSelector()">Seleccionar archivo</button> -->
+            <button 
+              class="fuse-mat-button-rounded bg-accent-700" type="button"
+              mat-flat-button [color]="'accent'"
+              (click)="openFileSelector()">
+
+              <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:cloud-upload'"></mat-icon>
+              <span class="ml-2">Seleccionar archivo</span>
+            </button>
+
+            <!-- <button type="button"></button> -->
+          </ng-template>
+        </ngx-file-drop>
+        <br>
+        <div class="upload-table">
+          <table class="table">
+            <thead>
+              <th>Nombre del archivo seleccionado: </th>
+              <!-- <tr > -->
+               
+                <th *ngFor="let item of files; let i=index"><strong>{{item.relativePath}}</strong></th>
+              <!-- </tr> -->
+              <!-- <tr >
+              
+              </tr> -->
+            </thead>
+            <!-- <tbody class="upload-name-style">
+              <tr *ngFor="let item of files; let i=index">
+                <td><strong>{{ item.relativePath }}</strong></td>
+              </tr>
+            </tbody> -->
+          </table>
+        </div>
+
+        <!--Datos obligatorios para la subida de datos del archivo -->
+        <div class="flex items-center w-full mt-6">
+          <mat-form-field appearance="fill" class="flex-auto  w-full  p-2">
+            <mat-label>Nombre del broadcast</mat-label>        
+            <input matInput type="text" name="nombre_archivo" input autocomplete="off"
+            [(ngModel)]="nombre_archivo"  [placeholder]="'Ingrese el nombre del archivo'">
+          </mat-form-field>
+
+          <div class="ng-autocomplete flex-auto w-full  p-2">
+            <mat-label>Unidad de negocio</mat-label>
+          <ng-autocomplete [data]="comboBusinessUnit" [searchKeyword]="keyword" placeholder="Seleccionar la unidad de negocio"
+            (selected)='selectBusinessUnit($event)'
+             [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+          </ng-autocomplete>
+
+          <ng-template #itemTemplate let-item>
+            <a [innerHTML]="item.Descripcion"></a>
+          </ng-template>
+
+          <ng-template #notFoundTemplate let-notFound>
+            <div [innerHTML]="notFound"></div>
+          </ng-template>
+          </div>
+          
+
+        </div>
+
+        <div class="flex items-center w-full mt-6">
+          <div class="ng-autocomplete flex-auto    p-2">
+            <mat-label>Categoria</mat-label>
+            <ng-autocomplete [data]="comboCategory" [searchKeyword]="keyword" placeholder="Seleccione la categoria"
+              (selected)='selectCategory($event)' 
+              [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+            </ng-autocomplete>
+
+            <ng-template #itemTemplate let-item>
+              <a [innerHTML]="item.name"></a>
+            </ng-template>
+
+            <ng-template #notFoundTemplate let-notFound>
+              <div [innerHTML]="notFound"></div>
+            </ng-template>
+          </div>
+          <div class="ng-autocomplete flex-auto   p-2">
+            <mat-label>Tipo de estado</mat-label>
+            <ng-autocomplete [data]="comboStateType" [searchKeyword]="keyword" placeholder="Seleccione el tipo de estado"
+              (selected)='selectStateType($event)'  [itemTemplate]="itemTemplate" [notFoundTemplate]="notFoundTemplate">
+            </ng-autocomplete>
+
+            <ng-template #itemTemplate let-item>
+              <a [innerHTML]="item.name"></a>
+            </ng-template>
+
+            <ng-template #notFoundTemplate let-notFound>
+              <div [innerHTML]="notFound"></div>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="flex items-center w-full mt-6" *ngIf="idComboStateType == 3">
+          <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto p-2">
+            <mat-label>Fecha de inicio</mat-label>
+            <input matInput type="date" [matDatepicker]="picker1" (change)="getStartDate($event)" [placeholder]="'Choose a date'">
+            <!-- <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle> -->
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field [ngClass]="formFieldHelpers" class="flex-auto p-2">
+            <mat-label>Fecha finalizacion</mat-label>
+            <input matInput  type="date" (change)="getEndDate($event)" [matDatepicker]="picker2" [placeholder]="'Choose a date'">
+            <!-- <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle> -->
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- Boton para crear el broadcast -->
+        <div class="mt-5 flex items-center justify-end" > 
+          <button mat-flat-button [color]="'primary'" type="button" (click)="saveUploadFile()"> Crear Broadcast </button> 
+        </div>
+       
+      </form>
+
+     
+    </div>
+    
+    <div class="mat-elevation-z8 mt-12" *ngIf="showForm">
+      <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
+    
+        <!-- Telefono Column -->
+
+        <ng-container matColumnDef="Telefono">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number"> Telefono</th>
+          
+          <td mat-cell *matCellDef="let element"> 
+            <div class="chips ">
+              {{element.Telefono}}
+            </div>
+             </td>
+        </ng-container>
+    
+        <!-- Mensaje   Column -->
+        <ng-container matColumnDef="Mensaje">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Mensaje </th>
+          <td mat-cell *matCellDef="let element"> {{element.Mensaje}} </td>
+        </ng-container>
+    
+    
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    
+      <mat-paginator [pageSizeOptions]="[20, 50, 100]"
+                     showFirstLastButtons 
+                     aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+
+  
+  
+</div>
+
+

@@ -1,0 +1,42 @@
+<h2 mat-dialog-title><b>Nombre del proceso: </b>{{data.NombreArchivo}}</h2>
+<mat-dialog-content class="mat-typography">
+    <div class="flex-auto p-6 sm:p-10">
+        <div class="max-w-3xl">
+            <!-- Titulo del dashboard -->
+            <div class="prose prose-sm max-w-3xl">
+                <mat-progress-bar matTooltip="{{data.Porcentaje}}%" 
+                mode="determinate" value="{{data.Porcentaje}}">
+                </mat-progress-bar>
+            </div>
+        </div>
+    </div>
+    <div class="mat-elevation-z8 mt-12">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort
+            (matSortChange)="announceSortChange($event)">
+
+            <ng-container matColumnDef="Telefono">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">Telefono</th>
+                <td mat-cell *matCellDef="let element">{{element.Telefono}}</td>
+            </ng-container>
+            <ng-container matColumnDef="Texto">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">Mensaje</th>
+                <td mat-cell *matCellDef="let element">{{element.Texto}}</td>
+            </ng-container>
+            <ng-container matColumnDef="Tipo_Estado">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">Estado</th>
+                <td mat-cell *matCellDef="let element">{{element.Tipo_Estado}}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[20, 50, 100]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+        </mat-paginator>
+    </div>
+</mat-dialog-content>
+        
+
+
+

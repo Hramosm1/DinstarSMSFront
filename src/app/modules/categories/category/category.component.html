@@ -1,0 +1,116 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- HEADER -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+            <!-- Breadcrumbs -->
+            <div class="flex flex-wrap items-center font-medium">
+                <div>
+                    <a class="whitespace-nowrap text-primary-500">Mantenimiento</a>
+                </div>
+                <div class="flex items-center ml-1 whitespace-nowrap">
+                    <mat-icon class="icon-size-5 text-secondary" [svgIcon]="'heroicons_solid:chevron-right'"></mat-icon>
+                    <a class="ml-1 text-primary-500">Categoria</a>
+                </div>
+            </div>
+            <!-- Title -->
+            <div class="mt-2">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Categoria
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN    -->
+    <div class="flex-auto p-6 sm:p-10 " >
+        <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card" >
+            <form class="flex flex-col mt-1 p-1 bg-card">
+                <mat-form-field appearance="fill" class="flex-auto  w-full  p-2">
+                    <mat-label>Nombre de la categoria</mat-label>        
+                    <input matInput type="text" name="saveCategory.Descripcion" 
+                    [(ngModel)]="saveCategory.Descripcion"  autocomplete="off"
+                   [placeholder]="'Ingrese el nombre de la categoria'">
+                  </mat-form-field>
+
+                <div class="mt-5 flex items-center justify-end" *ngIf="idBoton == 0"> 
+                  <button mat-flat-button [color]="'primary'" type="button" (click)="save_combo_category()"> Crear Categoria </button> 
+                </div>
+                <div class="mt-5 flex items-center justify-end" *ngIf="idBoton == 1"> 
+                    <button mat-flat-button [color]="'primary'" type="button" (click)="update_Category()"> Editar Categoria </button> 
+                  </div>
+            </form>
+        </div>
+
+        <div class="mat-elevation-z8 mt-8">
+            <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)">
+          
+              <!-- Telefono Column -->
+      
+              <ng-container matColumnDef="Id_Categoria">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number"> ID</th>
+                
+                <td mat-cell *matCellDef="let element"> 
+                  <div class="chips ">
+                    {{element.Id_Categoria}}
+                  </div>
+                   </td>
+              </ng-container>
+          
+              <!-- Descripcion   Column -->
+              <ng-container matColumnDef="Descripcion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Descripción </th>
+                <td mat-cell *matCellDef="let element"> {{element.Descripcion}} </td>
+              </ng-container>
+
+              <!-- Estado   Column -->
+              <ng-container matColumnDef="Estado">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Estado </th>
+                <td mat-cell *matCellDef="let element"> {{element.Estado}} </td>
+              </ng-container>
+
+              <!-- Fecha Registro   Column -->
+              <ng-container matColumnDef="Fecha_Registro">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Fecha Registro </th>
+                <td mat-cell *matCellDef="let element"> {{element.Fecha_Registro}} </td>
+              </ng-container>
+
+              <!-- Fecha Modificacion   Column -->
+              <ng-container matColumnDef="Fecha_Modificacion">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Fecha Modificación </th>
+                <td mat-cell *matCellDef="let element"> {{element.Fecha_Modificacion}} </td>
+              </ng-container>
+              
+              <!-- Fecha Modificacion   Column -->
+              <ng-container matColumnDef="Actualizar">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Actualizar </th>
+                <td mat-cell *matCellDef="let element"> 
+                    <button mat-raised-button color="primary" (click)="update_combo_category(element.Id_Categoria,element.Descripcion)">
+                        <!-- (click)="" -->
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:pencil'"></mat-icon>
+                    </button> </td>
+              </ng-container>
+
+              <!-- Fecha Modificacion   Column -->
+              <ng-container matColumnDef="Eliminar">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> Eliminar </th>
+                <td mat-cell *matCellDef="let element"> 
+                    <button mat-raised-button color="warn" (click)="delete_combo_category(element.Id_Categoria)">
+                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                </button> </td>
+              </ng-container>
+
+             
+
+          
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          
+            <mat-paginator [pageSizeOptions]="[20, 50, 100]"
+                           showFirstLastButtons 
+                           aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+    </div>
+</div>
